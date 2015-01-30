@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		BB3F04621A7B745100A78054 /* BeaconStationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3F04611A7B745100A78054 /* BeaconStationController.swift */; };
 		BB6273BF1A7B69B4008F1968 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6273BC1A7B696A008F1968 /* CoreBluetooth.framework */; };
-		BB6273C11A7B69F7008F1968 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6273C01A7B69F7008F1968 /* BluetoothManager.swift */; };
+		BB6273C11A7B69F7008F1968 /* BluetoothCentralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6273C01A7B69F7008F1968 /* BluetoothCentralController.swift */; };
 		BB6273C31A7B6C5B008F1968 /* BeaconReceiverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6273C21A7B6C5B008F1968 /* BeaconReceiverController.swift */; };
 		BB6273C51A7B6C6C008F1968 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6273C41A7B6C6C008F1968 /* CoreLocation.framework */; };
 		BBA4AC131A7B6087002E9A8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4AC121A7B6087002E9A8A /* AppDelegate.swift */; };
@@ -19,6 +19,7 @@
 		BBA4AC1C1A7B6087002E9A8A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBA4AC1B1A7B6087002E9A8A /* Images.xcassets */; };
 		BBA4AC1F1A7B6087002E9A8A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBA4AC1D1A7B6087002E9A8A /* LaunchScreen.xib */; };
 		BBA4AC2B1A7B6087002E9A8A /* BluetoothPiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4AC2A1A7B6087002E9A8A /* BluetoothPiTests.swift */; };
+		F03814181A7BD5B400AEF8DF /* BluetoothPeripheralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03814171A7BD5B400AEF8DF /* BluetoothPeripheralController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +35,7 @@
 /* Begin PBXFileReference section */
 		BB3F04611A7B745100A78054 /* BeaconStationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconStationController.swift; sourceTree = "<group>"; };
 		BB6273BC1A7B696A008F1968 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		BB6273C01A7B69F7008F1968 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
+		BB6273C01A7B69F7008F1968 /* BluetoothCentralController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothCentralController.swift; sourceTree = "<group>"; };
 		BB6273C21A7B6C5B008F1968 /* BeaconReceiverController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconReceiverController.swift; sourceTree = "<group>"; };
 		BB6273C41A7B6C6C008F1968 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBA4AC0D1A7B6087002E9A8A /* BluetoothPi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BluetoothPi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,6 +49,7 @@
 		BBA4AC241A7B6087002E9A8A /* BluetoothPiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluetoothPiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA4AC291A7B6087002E9A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBA4AC2A1A7B6087002E9A8A /* BluetoothPiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothPiTests.swift; sourceTree = "<group>"; };
+		F03814171A7BD5B400AEF8DF /* BluetoothPeripheralController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothPeripheralController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +110,8 @@
 				BBA4AC1B1A7B6087002E9A8A /* Images.xcassets */,
 				BBA4AC1D1A7B6087002E9A8A /* LaunchScreen.xib */,
 				BBA4AC101A7B6087002E9A8A /* Supporting Files */,
-				BB6273C01A7B69F7008F1968 /* BluetoothManager.swift */,
+				BB6273C01A7B69F7008F1968 /* BluetoothCentralController.swift */,
+				F03814171A7BD5B400AEF8DF /* BluetoothPeripheralController.swift */,
 				BB6273C21A7B6C5B008F1968 /* BeaconReceiverController.swift */,
 				BB3F04611A7B745100A78054 /* BeaconStationController.swift */,
 			);
@@ -242,9 +245,10 @@
 			files = (
 				BBA4AC171A7B6087002E9A8A /* SecondViewController.swift in Sources */,
 				BB6273C31A7B6C5B008F1968 /* BeaconReceiverController.swift in Sources */,
+				F03814181A7BD5B400AEF8DF /* BluetoothPeripheralController.swift in Sources */,
 				BB3F04621A7B745100A78054 /* BeaconStationController.swift in Sources */,
 				BBA4AC131A7B6087002E9A8A /* AppDelegate.swift in Sources */,
-				BB6273C11A7B69F7008F1968 /* BluetoothManager.swift in Sources */,
+				BB6273C11A7B69F7008F1968 /* BluetoothCentralController.swift in Sources */,
 				BBA4AC151A7B6087002E9A8A /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
