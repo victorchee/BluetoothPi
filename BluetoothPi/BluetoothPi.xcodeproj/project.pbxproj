@@ -13,8 +13,6 @@
 		BB6273C31A7B6C5B008F1968 /* BeaconReceiverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6273C21A7B6C5B008F1968 /* BeaconReceiverController.swift */; };
 		BB6273C51A7B6C6C008F1968 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB6273C41A7B6C6C008F1968 /* CoreLocation.framework */; };
 		BBA4AC131A7B6087002E9A8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4AC121A7B6087002E9A8A /* AppDelegate.swift */; };
-		BBA4AC151A7B6087002E9A8A /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4AC141A7B6087002E9A8A /* FirstViewController.swift */; };
-		BBA4AC171A7B6087002E9A8A /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA4AC161A7B6087002E9A8A /* SecondViewController.swift */; };
 		BBA4AC1A1A7B6087002E9A8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA4AC181A7B6087002E9A8A /* Main.storyboard */; };
 		BBA4AC1C1A7B6087002E9A8A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBA4AC1B1A7B6087002E9A8A /* Images.xcassets */; };
 		BBA4AC1F1A7B6087002E9A8A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBA4AC1D1A7B6087002E9A8A /* LaunchScreen.xib */; };
@@ -41,8 +39,6 @@
 		BBA4AC0D1A7B6087002E9A8A /* BluetoothPi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BluetoothPi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA4AC111A7B6087002E9A8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBA4AC121A7B6087002E9A8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		BBA4AC141A7B6087002E9A8A /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		BBA4AC161A7B6087002E9A8A /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		BBA4AC191A7B6087002E9A8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BBA4AC1B1A7B6087002E9A8A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		BBA4AC1E1A7B6087002E9A8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -104,8 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				BBA4AC121A7B6087002E9A8A /* AppDelegate.swift */,
-				BBA4AC141A7B6087002E9A8A /* FirstViewController.swift */,
-				BBA4AC161A7B6087002E9A8A /* SecondViewController.swift */,
 				BBA4AC181A7B6087002E9A8A /* Main.storyboard */,
 				BBA4AC1B1A7B6087002E9A8A /* Images.xcassets */,
 				BBA4AC1D1A7B6087002E9A8A /* LaunchScreen.xib */,
@@ -248,13 +242,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBA4AC171A7B6087002E9A8A /* SecondViewController.swift in Sources */,
 				BB6273C31A7B6C5B008F1968 /* BeaconReceiverController.swift in Sources */,
 				F03814181A7BD5B400AEF8DF /* BluetoothPeripheralController.swift in Sources */,
 				BB3F04621A7B745100A78054 /* BeaconStationController.swift in Sources */,
 				BBA4AC131A7B6087002E9A8A /* AppDelegate.swift in Sources */,
 				BB6273C11A7B69F7008F1968 /* BluetoothCentralController.swift in Sources */,
-				BBA4AC151A7B6087002E9A8A /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

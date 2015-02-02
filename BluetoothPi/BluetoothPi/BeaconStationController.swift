@@ -28,6 +28,7 @@ class BeaconStationController: UIViewController, CBPeripheralManagerDelegate {
         
         beaconData = beaconRegion.peripheralDataWithMeasuredPower(-59)
         peripheralManager = CBPeripheralManager(delegate: self, queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
+        peripheralManager.startAdvertising(beaconData)
     }
     
     override func didReceiveMemoryWarning() {
