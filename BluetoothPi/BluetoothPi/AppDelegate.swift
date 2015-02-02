@@ -16,6 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+//        if let centeralManagerIdentifiers: AnyObject = launchOptions?[UIApplicationLaunchOptionsBluetoothCentralsKey] {
+//            for identifier in centeralManagerIdentifiers as? Array {
+//                println(identifier)
+//            }
+//        }
+        
+        
         return true
     }
 

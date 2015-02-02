@@ -20,7 +20,8 @@ class BluetoothCentralController: UIViewController, CBCentralManagerDelegate, CB
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        centralManager = CBCentralManager(delegate: self, queue: nil)
+        centralManager = CBCentralManager(delegate: self, queue: nil
+            , options: [CBCentralManagerOptionRestoreIdentifierKey : "CentralManagerOptionRestoreIdentifier"])
         centralManager.scanForPeripheralsWithServices(nil, options: nil)
     }
     
@@ -56,6 +57,10 @@ class BluetoothCentralController: UIViewController, CBCentralManagerDelegate, CB
         
         peripheral.delegate = self;
         peripheral.discoverServices(nil)
+    }
+    
+    func centralManager(central: CBCentralManager!, willRestoreState dict: [NSObject : AnyObject]!) {
+        let peripherals: AnyObject? = dict[CBCentralManagerRestoredStatePeripheralsKey]
     }
     
     // MARK: CBPeripheralDelegate
