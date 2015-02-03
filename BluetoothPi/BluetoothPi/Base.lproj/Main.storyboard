@@ -2,9 +2,52 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
+        <!--Beacons-->
+        <scene sceneID="l6m-r5-5XU">
+            <objects>
+                <tableViewController id="LmF-0Y-hoy" customClass="BeaconReceiverController" customModule="BluetoothPi" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Lrg-3x-ax5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeaconCell" id="7Vq-Uf-lHz">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Vq-Uf-lHz" id="sVZ-Kb-xRk">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="LmF-0Y-hoy" id="c2e-EF-Ln9"/>
+                            <outlet property="delegate" destination="LmF-0Y-hoy" id="u1q-FJ-KwD"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Beacons" id="dVT-8T-CMz"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7OT-hH-2hS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1438" y="-681"/>
+        </scene>
+        <!--Receiver-->
+        <scene sceneID="qD4-xl-wjp">
+            <objects>
+                <navigationController id="ZiS-Ed-Li4" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Receiver" id="zv0-gH-I47"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ua4-Ik-ZTV">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="LmF-0Y-hoy" kind="relationship" relationship="rootViewController" id="XdH-6Y-f4m"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Oh-kD-aes" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="618" y="-681"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -16,51 +59,12 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="Rh6-tD-hos" kind="relationship" relationship="viewControllers" id="rj3-xR-GN0"/>
+                        <segue destination="ZiS-Ed-Li4" kind="relationship" relationship="viewControllers" id="ZFX-BB-mQf"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="0.0" y="0.0"/>
-        </scene>
-        <!--Receiver-->
-        <scene sceneID="RVS-Sj-uUh">
-            <objects>
-                <viewController id="Rh6-tD-hos" customClass="BeaconReceiver" customModule="BluetoothPi" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fet-pq-R3w"/>
-                        <viewControllerLayoutGuide type="bottom" id="cf3-c6-S7Y"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="mCP-RY-IJc">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1O0-77-rdf">
-                                <rect key="frame" x="16" y="278" width="568" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="ROK-Ev-cLM"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.89411764709999997" green="0.71764705880000002" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="1O0-77-rdf" secondAttribute="centerX" id="K2Z-U8-Slh"/>
-                            <constraint firstItem="1O0-77-rdf" firstAttribute="leading" secondItem="mCP-RY-IJc" secondAttribute="leadingMargin" id="Wly-G2-3rz"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="1O0-77-rdf" secondAttribute="trailing" id="yvf-KC-Ovz"/>
-                            <constraint firstAttribute="centerY" secondItem="1O0-77-rdf" secondAttribute="centerY" id="zi9-DA-baE"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Receiver" id="C1Z-e6-ppU"/>
-                    <connections>
-                        <outlet property="statusLabel" destination="1O0-77-rdf" id="S23-Pf-Qnx"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="yDL-Tn-KJt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="632" y="-689"/>
         </scene>
     </scenes>
 </document>

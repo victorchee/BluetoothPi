@@ -9,14 +9,15 @@
 import UIKit
 import CoreLocation
 
-class BeaconReceiver: UIViewController, CLLocationManagerDelegate {
-    @IBOutlet weak var statusLabel: UILabel!
+class BeaconReceiverController: UITableViewController, CLLocationManagerDelegate {
     
     let locationManager: CLLocationManager = CLLocationManager()
+    var beacons: [AnyObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         
@@ -53,18 +54,23 @@ class BeaconReceiver: UIViewController, CLLocationManagerDelegate {
         if !beacons.isEmpty {
             println("Beacons found")
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.statusLabel.text = "Beacons found"
+                self.navigationItem.prompt = "Beacons found"
             })
+            self.beacons = beacons
             
-            let nearestBeacon: CLBeacon = beacons.first as CLBeacon
-            println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)")
-            
-            for beacon in beacons {
-                let uuid = beacon.proximityUUID
-                let major = beacon.major
-                let minor = beacon.minor
-                println("uuid = \(uuid)\nmajor = \(major)\nminor = \(minor)")
-            }
+//            let nearestBeacon: CLBeacon = beacons.first as CLBeacon
+//            println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)")
+//            
+//            for beacon in beacons {
+//                let uuid = beacon.proximityUUID
+//                let major = beacon.major
+//                let minor = beacon.minor
+//                println("uuid = \(uuid)\nmajor = \(major)\nminor = \(minor)")
+//            }
+        } else {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.navigationItem.prompt = nil
+            })
         }
     }
     
@@ -74,5 +80,28 @@ class BeaconReceiver: UIViewController, CLLocationManagerDelegate {
             localNotification.alertBody = "Will exit home"
             UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
         }
+    }
+    
+    
+    // MARK: - Table view data source
+    
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        // Return the number of sections.
+        return 1
+    }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Return the number of rows in the section.
+        return beacons.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("BeaconCell", forIndexPath: indexPath) as UITableViewCell
+        
+        // Configure the cell...
+        let beacon: CLBeacon = self.beacons[indexPath.row] as CLBeacon
+        cell.textLabel?.text = beacon.proximityUUID.UUIDString
+        
+        return cell
     }
 }
