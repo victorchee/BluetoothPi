@@ -11,14 +11,11 @@ import CoreBluetooth
 import CoreLocation
 
 class BeaconStationController: UIViewController, CBPeripheralManagerDelegate {
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    @IBOutlet weak var statusLabel: UILabel!
     
-    var beaconRegion: CLBeaconRegion
-    var beaconData: NSDictionary
-    var peripheralManager: CBPeripheralManager
+    private var beaconRegion: CLBeaconRegion?
+    private var beaconData: NSDictionary?
+    private var peripheralManager: CBPeripheralManager?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +23,7 @@ class BeaconStationController: UIViewController, CBPeripheralManagerDelegate {
         let uuid: NSUUID = NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!
         beaconRegion = CLBeaconRegion(proximityUUID: uuid, major: 1, minor: 1, identifier: "com.victorchee.beacon")
         
-        beaconData = beaconRegion.peripheralDataWithMeasuredPower(-59)
+        beaconData = beaconRegion!.peripheralDataWithMeasuredPower(-59)
         peripheralManager = CBPeripheralManager(delegate: self, queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
     }
     
@@ -51,12 +48,18 @@ class BeaconStationController: UIViewController, CBPeripheralManagerDelegate {
             // Bluetooth is on
             println("Broadcasting")
             // Start boradcasting
-            peripheralManager.startAdvertising(beaconData)
+            peripheralManager!.startAdvertising(beaconData)
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.statusLabel.text = "Beacon advertising..."
+            })
         } else if peripheral.state == .PoweredOff {
             // Bluetooth is off
             println("Stopped")
             // Stop broadcasting
-            peripheralManager.stopAdvertising()
+            peripheralManager!.stopAdvertising()
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.statusLabel.text = nil
+            })
         }
     }
 }

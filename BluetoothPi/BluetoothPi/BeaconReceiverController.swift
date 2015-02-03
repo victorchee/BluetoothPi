@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 
 class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
+    @IBOutlet weak var statusLabel: UILabel!
     
     let locationManager: CLLocationManager = CLLocationManager()
     
@@ -26,8 +27,9 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
         beaconRegion.notifyOnEntry = true
         beaconRegion.notifyOnExit = true
         
-        locationManager.startMonitoringForRegion(beaconRegion)
+        locationManager.startRangingBeaconsInRegion(beaconRegion)
         
+//        locationManager.startMonitoringForRegion(beaconRegion)
 //        locationManager.stopMonitoringForRegion(beaconRegion)
     }
     
@@ -50,9 +52,6 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
         if !beacons.isEmpty {
             println("Beacons found")
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.navigationItem.prompt = "Beacons found"
-            })
             
             let nearestBeacon: CLBeacon = beacons.first as CLBeacon
             println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)")
@@ -66,16 +65,12 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
             case .Immediate :
                 println("Beacon proximity immediate")
             }
-            
-//            for beacon in beacons {
-//                let uuid = beacon.proximityUUID
-//                let major = beacon.major
-//                let minor = beacon.minor
-//                println("uuid = \(uuid)\nmajor = \(major)\nminor = \(minor)")
-//            }
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.statusLabel.text = nearestBeacon.proximityUUID.UUIDString
+            })
         } else {
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.navigationItem.prompt = nil
+                self.statusLabel.text = nil
             })
         }
     }
