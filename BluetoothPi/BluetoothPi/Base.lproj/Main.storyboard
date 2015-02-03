@@ -4,33 +4,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
-        <!--Beacons-->
-        <scene sceneID="l6m-r5-5XU">
-            <objects>
-                <tableViewController id="LmF-0Y-hoy" customClass="BeaconReceiverController" customModule="BluetoothPi" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Lrg-3x-ax5">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeaconCell" id="7Vq-Uf-lHz">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Vq-Uf-lHz" id="sVZ-Kb-xRk">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="LmF-0Y-hoy" id="c2e-EF-Ln9"/>
-                            <outlet property="delegate" destination="LmF-0Y-hoy" id="u1q-FJ-KwD"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Beacons" id="dVT-8T-CMz"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7OT-hH-2hS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1438" y="-681"/>
-        </scene>
         <!--Receiver-->
         <scene sceneID="qD4-xl-wjp">
             <objects>
@@ -41,12 +14,31 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="LmF-0Y-hoy" kind="relationship" relationship="rootViewController" id="XdH-6Y-f4m"/>
+                        <segue destination="aJh-tV-u7F" kind="relationship" relationship="rootViewController" id="g94-gA-y2G"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Oh-kD-aes" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="618" y="-681"/>
+        </scene>
+        <!--Beacon Receiver Controller-->
+        <scene sceneID="Je2-Ws-NqL">
+            <objects>
+                <viewController id="aJh-tV-u7F" customClass="BeaconReceiverController" customModule="BluetoothPi" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ddd-JS-jal"/>
+                        <viewControllerLayoutGuide type="bottom" id="VJZ-GL-ROa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Rbo-73-jgh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dQC-yn-hlB"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3So-q1-zYq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1322" y="-681"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">

@@ -9,16 +9,15 @@
 import UIKit
 import CoreLocation
 
-class BeaconReceiverController: UITableViewController, CLLocationManagerDelegate {
+class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
     
     let locationManager: CLLocationManager = CLLocationManager()
-    var beacons: [AnyObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self
         
         let uuid:NSUUID = NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!
@@ -28,10 +27,8 @@ class BeaconReceiverController: UITableViewController, CLLocationManagerDelegate
         beaconRegion.notifyOnExit = true
         
         locationManager.startMonitoringForRegion(beaconRegion)
-        locationManager.startRangingBeaconsInRegion(beaconRegion)
         
 //        locationManager.stopMonitoringForRegion(beaconRegion)
-//        locationManager.stopRangingBeaconsInRegion(beaconRegion)
     }
     
     override func didReceiveMemoryWarning() {
@@ -56,11 +53,20 @@ class BeaconReceiverController: UITableViewController, CLLocationManagerDelegate
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.navigationItem.prompt = "Beacons found"
             })
-            self.beacons = beacons
             
-//            let nearestBeacon: CLBeacon = beacons.first as CLBeacon
-//            println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)")
-//            
+            let nearestBeacon: CLBeacon = beacons.first as CLBeacon
+            println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)")
+            switch nearestBeacon.proximity {
+            case CLProximity.Unknown :
+                println("Beacon proximity unknown")
+            case .Far :
+                println("Beacon proximity far")
+            case .Near :
+                println("Beacon proximity near")
+            case .Immediate :
+                println("Beacon proximity immediate")
+            }
+            
 //            for beacon in beacons {
 //                let uuid = beacon.proximityUUID
 //                let major = beacon.major
@@ -74,34 +80,23 @@ class BeaconReceiverController: UITableViewController, CLLocationManagerDelegate
         }
     }
     
-    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
+    func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
         if region.isKindOfClass(CLBeaconRegion) {
             var localNotification: UILocalNotification = UILocalNotification()
-            localNotification.alertBody = "Will exit home"
+            localNotification.alertBody = "Will enter region"
             UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
+            
+            locationManager.startRangingBeaconsInRegion(region as CLBeaconRegion)
         }
     }
     
-    
-    // MARK: - Table view data source
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // Return the number of sections.
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Return the number of rows in the section.
-        return beacons.count
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("BeaconCell", forIndexPath: indexPath) as UITableViewCell
-        
-        // Configure the cell...
-        let beacon: CLBeacon = self.beacons[indexPath.row] as CLBeacon
-        cell.textLabel?.text = beacon.proximityUUID.UUIDString
-        
-        return cell
+    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
+        if region.isKindOfClass(CLBeaconRegion) {
+            var localNotification: UILocalNotification = UILocalNotification()
+            localNotification.alertBody = "Will exit region"
+            UIApplication.sharedApplication().presentLocalNotificationNow(localNotification)
+            
+            locationManager.stopRangingBeaconsInRegion(region as CLBeaconRegion)
+        }
     }
 }
