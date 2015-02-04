@@ -13,6 +13,7 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var statusLabel: UILabel!
     
     let locationManager: CLLocationManager = CLLocationManager()
+    var beaconRegion:CLBeaconRegion!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +23,7 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         
         let uuid:NSUUID = NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!
-        let beaconRegion:CLBeaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: "com.victorchee.beacon")
+        beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: "com.victorchee.beacon")
         beaconRegion.notifyEntryStateOnDisplay = true
         beaconRegion.notifyOnEntry = true
         beaconRegion.notifyOnExit = true
@@ -36,6 +37,20 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // start ranging
+        locationManager.startRangingBeaconsInRegion(beaconRegion)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // stop ranging
+        locationManager.stopRangingBeaconsInRegion(beaconRegion)
     }
     
     /*
