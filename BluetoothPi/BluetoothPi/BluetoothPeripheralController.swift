@@ -10,13 +10,8 @@ import UIKit
 import CoreBluetooth
 
 class BluetoothPeripheralController: UIViewController, CBPeripheralManagerDelegate {
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    var peripheralManager: CBPeripheralManager
-    var characteristic: CBMutableCharacteristic
+    var peripheralManager: CBPeripheralManager!
+    var characteristic: CBMutableCharacteristic!
     
     override func viewDidLoad() {
         super.viewDidLoad()

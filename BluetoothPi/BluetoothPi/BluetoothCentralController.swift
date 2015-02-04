@@ -11,11 +11,7 @@ import CoreBluetooth
 
 class BluetoothCentralController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    var centralManager: CBCentralManager
+    var centralManager: CBCentralManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
