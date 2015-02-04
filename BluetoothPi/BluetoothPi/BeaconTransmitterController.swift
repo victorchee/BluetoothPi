@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 import CoreLocation
 
-class BeaconStationController: UIViewController, CBPeripheralManagerDelegate {
+class BeaconTransmitterController: UIViewController, CBPeripheralManagerDelegate {
     @IBOutlet weak var statusLabel: UILabel!
     
     private var beaconRegion: CLBeaconRegion?
@@ -46,7 +46,7 @@ class BeaconStationController: UIViewController, CBPeripheralManagerDelegate {
     func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager!) {
         if peripheral.state == CBPeripheralManagerState.PoweredOn {
             // Bluetooth is on
-            println("Broadcasting")
+            println("Advertising")
             // Start boradcasting
             peripheralManager!.startAdvertising(beaconData)
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
