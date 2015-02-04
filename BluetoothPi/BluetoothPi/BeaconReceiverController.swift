@@ -23,14 +23,14 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         
         let uuid:NSUUID = NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!
-        beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: "com.victorchee.beacon")
+        beaconRegion = CLBeaconRegion(proximityUUID: uuid, identifier: "")
         beaconRegion.notifyEntryStateOnDisplay = true
         beaconRegion.notifyOnEntry = true
         beaconRegion.notifyOnExit = true
         
         locationManager.startRangingBeaconsInRegion(beaconRegion)
         
-//        locationManager.startMonitoringForRegion(beaconRegion)
+        locationManager.startMonitoringForRegion(beaconRegion)
 //        locationManager.stopMonitoringForRegion(beaconRegion)
     }
     
@@ -84,6 +84,7 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
                 self.statusLabel.text = nearestBeacon.proximityUUID.UUIDString
             })
         } else {
+            println("No bvim eacons found")
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.statusLabel.text = nil
             })
