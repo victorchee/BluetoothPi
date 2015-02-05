@@ -70,7 +70,7 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
             println("Beacons found")
             
             let nearestBeacon: CLBeacon = beacons.first as CLBeacon
-            println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)")
+            println("nearest uuid = \(nearestBeacon.proximityUUID)\nnearest major = \(nearestBeacon.major)\nnearest minor = \(nearestBeacon.minor)\nnearest rssi = \(nearestBeacon.rssi)\nnearest accuracy = \(nearestBeacon.accuracy)")
             switch nearestBeacon.proximity {
             case CLProximity.Unknown :
                 println("Beacon proximity unknown")
@@ -82,7 +82,7 @@ class BeaconReceiverController: UIViewController, CLLocationManagerDelegate {
                 println("Beacon proximity immediate")
             }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.statusLabel.text = nearestBeacon.proximityUUID.UUIDString
+                self.statusLabel.text = "uuid = \(nearestBeacon.proximityUUID.UUIDString)\nmajor = \(nearestBeacon.major)\nminor = \(nearestBeacon.minor)\nrssi = \(nearestBeacon.rssi)\naccuracy = \(nearestBeacon.accuracy)"
             })
         } else {
             println("No bvim eacons found")
