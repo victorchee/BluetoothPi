@@ -14,13 +14,14 @@ class BluetoothCentralController: UIViewController, CBCentralManagerDelegate, CB
     let uuid:NSUUID = NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!
     var centralManager: CBCentralManager!
     var discoveredPeripheral: CBPeripheral?
-    var data: NSMutableData?
+    var data: NSMutableData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         centralManager = CBCentralManager(delegate: self, queue: nil
             , options: [CBCentralManagerOptionRestoreIdentifierKey : "CentralManagerOptionRestoreIdentifier"])
+        data = NSMutableData()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -185,22 +186,49 @@ class BluetoothCentralController: UIViewController, CBCentralManagerDelegate, CB
             return
         }
         
-        let data: NSData = characteristic.value
+        let dataValue: NSData = characteristic.value
+        let stringValue: String = NSString(data: dataValue, encoding: NSUTF8StringEncoding)!
         
-        // Cancel our subscription to the characteristic
-        peripheral.setNotifyValue(false, forCharacteristic: characteristic)
-        // Disconnect from the peripheral
-        centralManager.cancelPeripheralConnection(peripheral)
+        // Have we got everything we need?
+        if stringValue == "EOM" {
+            // Cancel our subscription to the characteristic
+            peripheral.setNotifyValue(false, forCharacteristic: characteristic)
+            // Disconnect from the peripheral
+            centralManager.cancelPeripheralConnection(peripheral)
+        }
         
-//        peripheral.writeValue(data, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithResponse)
+        // Otherwise, just add the data on to what we already have
+        data.appendData(dataValue)
+        
+        println("Received: %@", stringValue)
     }
     
     func peripheral(peripheral: CBPeripheral!, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
-        let data: NSData = characteristic.value
-        // parse the data as needed
+        if error != nil {
+            println("Error update notification state for characteristic: \(error)")
+        }
+        
+        // Exit if it's not the transfer characteristic
+        if !characteristic.UUID.isEqual(uuid) {
+            return
+        }
+        
+        if characteristic.isNotifying {
+            // Notification has started
+            println("Notification began on \(characteristic)")
+        } else {
+            // Notification has stopped
+            println("Notification stopped on \(characteristic). Disconnecting")
+            centralManager.cancelPeripheralConnection(peripheral)
+        }
     }
     
-    func peripheral(peripheral: CBPeripheral!, didWriteValueForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
-        println(error.localizedDescription)
+    func centralManager(central: CBCentralManager!, didDisconnectPeripheral peripheral: CBPeripheral!, error: NSError!) {
+        println("Peripheral disconnected")
+        
+        discoveredPeripheral = nil
+        
+        // We're disconnected, so start scanning again
+        scan()
     }
 }
