@@ -11,7 +11,12 @@ import CoreBluetooth
 
 class BluetoothPeripheralController: UIViewController, CBPeripheralManagerDelegate {
     var peripheralManager: CBPeripheralManager!
-    var characteristic: CBMutableCharacteristic!
+    var transferCharacteristic: CBMutableCharacteristic!
+    var dataToSend: NSData!
+    var sendDataIndex: Int = 0
+    var sendingEOM = false
+    let notifyMTU: Int = 20
+    let uuid: CBUUID = CBUUID(string: "3D27FA6E-03D5-4002-8A45-084ABEE65E84")!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,17 +24,14 @@ class BluetoothPeripheralController: UIViewController, CBPeripheralManagerDelega
         // Do any additional setup after loading the view.
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
         
-        // run 'uuidgen' in terminal
-        let uuid: CBUUID = CBUUID(string: "3D27FA6E-03D5-4002-8A45-084ABEE65E84")
-        let data: NSData = NSData()
-        characteristic = CBMutableCharacteristic(type: uuid, properties: CBCharacteristicProperties.Read, value: data, permissions: CBAttributePermissions.Readable)
-        var service: CBMutableService = CBMutableService(type: uuid, primary: true)
-        service.characteristics = [characteristic]
+        peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : uuid])
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        // Don't keep it going while we're not showing
+        peripheralManager.stopAdvertising()
         
-        peripheralManager.addService(service)
-        
-        peripheralManager.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [service.UUID]])
-        
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +39,74 @@ class BluetoothPeripheralController: UIViewController, CBPeripheralManagerDelega
         // Dispose of any resources that can be recreated.
     }
     
+    private func sendData() {
+        // First up, check if we're meant to be sending an EOM
+        if sendingEOM {
+            // send it
+            let didSend = peripheralManager.updateValue("EOM".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false), forCharacteristic: transferCharacteristic, onSubscribedCentrals: nil)
+            
+            if didSend {
+                sendingEOM = false
+                println("Sent: EOM")
+            }
+            
+            // if it didn't send, so we'll exit and wait for peripheralManagerIsReadyToUpdateSubscripbers to call sendData agin
+            return
+        }
+        
+        // We're not sending an EOM, so we're sending data
+        // Is there any left to send?
+        if sendDataIndex >= dataToSend.length {
+            // No data left. Do nothing
+            return
+        }
+        
+        // There's data left, so send until the callback fails, or we're done.
+        var didSend = true
+        
+        while didSend {
+            // Make the next chunk
+            // Work out how big it should be
+            var amountToSend = dataToSend.length - sendDataIndex
+            // Can't be longer than 20 bytes
+            if amountToSend > notifyMTU {
+                amountToSend = notifyMTU
+            }
+            // Copy out the data we want
+            let chunk = NSData(bytes: dataToSend.bytes + sendDataIndex, length: amountToSend)
+            // Send it
+            didSend = peripheralManager.updateValue(chunk, forCharacteristic: transferCharacteristic, onSubscribedCentrals: nil)
+            
+            // If it didn't work, drop out and wait for the callback
+            if !didSend {
+                return
+            }
+            
+            let stringFromData = NSString(data: chunk, encoding: NSUTF8StringEncoding)
+            println("Sent: \(stringFromData)")
+            
+            // It did send, so update our index
+            sendDataIndex += amountToSend
+            
+            // Was it the last one?
+            if sendDataIndex >= dataToSend.length {
+                // It was - send an EOM
+                // Set this so if the send fails, we'll send it next time
+                sendingEOM = true
+                
+                // Send it
+                let eomSent = peripheralManager.updateValue("EOM".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false), forCharacteristic: transferCharacteristic, onSubscribedCentrals: nil)
+                
+                if eomSent {
+                    // It sent, we're all done
+                    sendingEOM = false
+                    println("Sent: EOM")
+                }
+                
+                return
+            }
+        }
+    }
 
     /*
     // MARK: - Navigation
@@ -50,38 +120,36 @@ class BluetoothPeripheralController: UIViewController, CBPeripheralManagerDelega
 
     // MARK: CBPeripheralManagerDelegate
     func peripheralManagerDidUpdateState(peripheral: CBPeripheralManager!) {
-        println("peripheral manager did update state")
-    }
-    
-    func peripheralManager(peripheral: CBPeripheralManager!, didAddService service: CBService!, error: NSError!) {
-        println(error.localizedDescription)
-    }
-    
-    func peripheralManagerDidStartAdvertising(peripheral: CBPeripheralManager!, error: NSError!) {
-        println(error.localizedDescription)
-    }
-    
-    func peripheralManager(peripheral: CBPeripheralManager!, didReceiveReadRequest request: CBATTRequest!) {
-        if request.characteristic.UUID.isEqual(characteristic.UUID) {
-            println("peripheral manager did reveive read request")
-            if request.offset > characteristic.value.length {
-                peripheralManager.respondToRequest(request, withResult: CBATTError.InvalidOffset)
-                return;
-            } else {
-                request.value = characteristic.value.subdataWithRange(NSMakeRange(request.offset, characteristic.value.length - request.offset))
-                peripheralManager.respondToRequest(request, withResult: CBATTError.Success)
-                
-            }
+        if peripheral.state == CBPeripheralManagerState.PoweredOn {
+            // We're in PoweredOn state...
+            println("Peripheral manager powered on.")
+            // so build our service
+            transferCharacteristic = CBMutableCharacteristic(type: uuid, properties: CBCharacteristicProperties.Notify, value: nil, permissions: CBAttributePermissions.Readable)
+            let transferService = CBMutableService(type: uuid, primary: true)
+            // Add the characteristic to the service
+            transferService.characteristics = [transferCharacteristic]
+            // And add it to the peripheral manager
+            peripheralManager.addService(transferService)
         }
     }
     
-    func peripheralManager(peripheral: CBPeripheralManager!, didReceiveWriteRequests requests: [AnyObject]!) {
-        characteristic.value = (requests.first as CBATTRequest).value
-        peripheralManager.respondToRequest(requests.first as CBATTRequest, withResult: CBATTError.Success)
+    func peripheralManager(peripheral: CBPeripheralManager!, central: CBCentral!, didSubscribeToCharacteristic characteristic: CBCharacteristic!) {
+        println("Central subscribed to characteristic");
+        
+        // Get the data
+        dataToSend = "EOM".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        // Reset the index
+        sendDataIndex = 0
+        // Start sending
+        sendData()
     }
     
-    func peripheralManager(peripheral: CBPeripheralManager!, central: CBCentral!, didSubscribeToCharacteristic theCharacteristic: CBCharacteristic!) {
-        let data = theCharacteristic.value
-        let didSendValue: Bool = peripheralManager.updateValue(data, forCharacteristic: characteristic, onSubscribedCentrals: nil)
+    func peripheralManager(peripheral: CBPeripheralManager!, central: CBCentral!, didUnsubscribeFromCharacteristic characteristic: CBCharacteristic!) {
+        println("Central unsubscribed from characteristic")
+    }
+    
+    func peripheralManagerIsReadyToUpdateSubscribers(peripheral: CBPeripheralManager!) {
+        // Start sending again
+        sendData()
     }
 }
